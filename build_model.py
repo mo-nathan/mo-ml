@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from pathlib import Path
 from fastai.vision.all import get_image_files
 from fastai.vision.all import ImageDataLoaders
