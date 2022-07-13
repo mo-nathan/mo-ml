@@ -30,35 +30,44 @@ https://www.inaturalist.org/blog/63931-the-latest-computer-vision-model-updates
 
 https://course.fast.ai/
 
-# Additional questions
+# Goals
 
-What happens with more taxa?
+Minimal Viable Model for the Website
+- Start with the labels from Alan Ceslestino's model
+- Use resnet34
+- Review Alan's Jupyter Notebooks
+- Document reproducible process
+- Try using Google GPU systems
+- Hook it into MO using updated software (up to date Python and fastai)
 
-What happens with other resnets?
+Explore Model Parameters
+- How do we measure "better"?
+- Does image resolution change anything?
+- Does the resnet change anything?
+- Should we be using data augmentation?
+- What happens when we looking at the last 1000 observations?
 
-Can we figure out what Alan Celestino did? (1219 taxa, not sure which images)
-(I have some Jupyter Notebooks from Alan)
+Image Review Process
+- Should we add non-fungal labels like 'microscopy', 'environment', or 'junk'?
+- How do we mark images for other labels (like the above or alternative taxa etc.)?
+- Should we do something special with non-diagnostic images (like just the cap)?
+- Can we easily create a UI for quick review of a label?
+- Is a multi-label system desirable? (https://medium.com/mlearning-ai/approaching-multi-label-image-classification-using-fastai-515a4fd52c8c)
 
-Do we need a service with a GPU to get the above to fly?
+Handling Non-Species Ids
+- What do we do with "Amanita gemmata group" and other "groups"?
+- How can we get higher level taxa like "Agaricales" or "Russula"?
+- How do we find some reasonable label for everything?
 
-Will that include the Amanita gemmata group?
+Add New Taxa
+- What are the criteria?
+- Can we source images for rare taxa?
+- Can we find very similar taxa that maybe should be grouped? (lumping)
+- Is there anyway to identify names that should get split?
 
-How do we deal with higher level taxa? (genera, families etc.)
+Expanding the model
+- Can we add location?  Seasonality?  Habitat/substrate?  Microscopic features?  DNA?
+- Can we give users the ability to give feedback on bad ids?
 
-Can we handle rare species well maybe using data augmentation?
-
-Is there a good way to coalesce very similar taxa?
-
-Can we spot interesting new things to name? (groups of similar species or
-perhaps species that have internal clusters that might be deserve new names)
-
-What's a good strategy for providing some sort of label for everything?  (What do
-we do with "Agaricales"?)
-
-How can we add location, seasonability and/or habitat/substrate info?
-
-Can we find similar images (vs. just getting a set of labels)?
-
-How do we use "bad" ids as feedback?
-
-How/when do we add new taxa?
+Other features
+- Can we find similar images (vs. just getting a set of labels)?
