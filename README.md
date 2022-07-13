@@ -36,7 +36,7 @@ Minimal Viable Model for the Website
 - Start with the labels from Alan Ceslestino's model
 - Use resnet34
 - Review Alan's Jupyter Notebooks
-- Document reproducible process
+- Document reproducible process.  pip vs. Anaconda?  Python code vs. Jupyter Notebooks?
 - Try using Google GPU systems
 - Hook it into MO using updated software (up to date Python and fastai)
 
