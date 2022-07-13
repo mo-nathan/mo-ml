@@ -24,6 +24,15 @@ learn.export("mo_model.pkl")
 # learn = load_learner("sample/mo_model.pkl")
 # learn.dls.vocab
 
+# Sadly the below does not seem to work with a model loaded from
+# a pickle file.  Don't know why yet.
+
+# import matplotlib.pyplot as plt
+# interp = ClassificationInterpretation.from_learner(learn)
+# interp.plot_confusion_matrix()
+# plt.show()
+
+# Code to do a prediction on a single image
 # uploader = SimpleNamespace(data = ['sample/Coprinus_comatus/1084.jpg'])
 # img = PILImage.create(uploader.data[0])
 # learn.predict(img)
