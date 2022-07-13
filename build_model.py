@@ -14,12 +14,13 @@ fnames = get_image_files(path)
 def label_func(x):
     return x.parent.name
 
-# dls = ImageDataLoaders.from_path_func(path, fnames, label_func, item_tfms=Resize(160))
-# learn = vision_learner(dls, resnet34, metrics=error_rate)
-# learn.fine_tune(10)
+dls = ImageDataLoaders.from_path_func(path, fnames, label_func, item_tfms=Resize(160))
+learn = vision_learner(dls, resnet34, metrics=error_rate)
+learn.fine_tune(10)
+learn.export("mo_model.pkl")
 
-learn = load_learner("sample/first.pkl")
-learn.dls.vocab
+# learn = load_learner("sample/mo_model.pkl")
+# learn.dls.vocab
 
 # uploader = SimpleNamespace(data = ['sample/Coprinus_comatus/1084.jpg'])
 # img = PILImage.create(uploader.data[0])
