@@ -131,3 +131,6 @@ dmypy.json
 model_20*
 *~
 sample
+images
+.DS_Store
+tmp
