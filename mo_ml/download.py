@@ -56,13 +56,17 @@ def process_data(data):
     # labels = most_common_labels(data)
     labels = file_labels("labels.txt")
     obs_per_label = 100
-    train = True
+    total = 0
     for obs_list in obs_by_labels(data, labels).values():
-        for obs in sorted(obs_list, key=obs_score)[:obs_per_label]:
-            download_image(obs, train)
-            train = not train
+        for obs in sorted(obs_list, key=obs_score): # [:obs_per_label]:
+            if -obs_score(obs) < 2.0:
+                # print(f"{obs['name']}: {-obs_score(obs)}")
+                break
+            total += 1
+            # download_image(obs)
+    print(f"total: {total}")
 
-def download_image(obs, train):
+def download_image(obs):
     name = obs['name'].replace(' ', '_')
     image_id = obs['image_id']
     path = os.path.join("sample", name)

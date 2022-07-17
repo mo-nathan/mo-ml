@@ -18,8 +18,10 @@ def label_func(x):
 
 dls = ImageDataLoaders.from_path_func(path, fnames, label_func, item_tfms=Resize(160))
 learn = vision_learner(dls, resnet34, metrics=error_rate)
+print(datetime.now())
 learn.fine_tune(10)
-learn.export("mo_model.pkl")
+print(datetime.now())
+learn.export(f"mo_model-{len(learn.dls.vocab)}.pkl")
 
 # learn = load_learner("sample/mo_model.pkl")
 # learn.dls.vocab
@@ -31,6 +33,8 @@ learn.export("mo_model.pkl")
 # from fastai.vision.all import ClassificationInterpretation
 # interp = ClassificationInterpretation.from_learner(learn)
 # interp.plot_confusion_matrix()
+# plt.show()
+# interp.plot_top_losses(5, nrows=1)
 # plt.show()
 
 # Code to do a prediction on a single image
