@@ -1,0 +1,86 @@
+#!/usr/bin/env python3
+# Example:
+# ./ml_predict --image_dir=/Users/nathan/mo-320/320 --model_file=export.pkl --model_id=3 > non-diagnostic.txt
+
+import argparse
+import csv
+import io
+import os
+import sys
+import pathlib
+import requests
+from random import shuffle
+
+from fastai.vision.all import *
+
+MO_USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36'
+MO_HEADERS = {'User-Agent': MO_USER_AGENT}
+
+class Predictor:
+    def __init__(self, args):
+        self.args = args
+        self.learner = load_learner(args.model_file)
+        self.image_dir = args.image_dir
+        if not os.path.exists(self.image_dir):
+            self.image_dir = None
+        self.model_id = args.model_id
+        self.website = args.website
+
+    def predict(self):
+        data = requests.get(self._model_url(), headers=MO_HEADERS).text
+        for image_id in self._image_ids(data):
+            self._predict_image(image_id)
+
+    def _image_ids(self, data):
+        ids = []
+        for row in csv.DictReader(io.StringIO(initial_value=data), delimiter='\t'):
+            if row['model_id'] == str(self.model_id):
+                ids.append(row['image_id'])
+        if self.args.count < 0:
+            return ids
+        shuffle(ids)
+        return ids[:self.args.count]
+
+    def _predict_image(self, image_id):
+        image_data = self._local_data(image_id)
+        label = "File Missing"
+        if image_data:
+            with self.learner.no_bar():
+                label, index, probs = self.learner.predict(image_data)
+        print(f"{image_id} {label}")
+
+    def _local_data(self, image_id):
+        if self.image_dir != None:
+            local_path = image_path(image_id, pathlib.Path(self.image_dir))
+            if os.path.exists(local_path):
+                with open(local_path, 'rb') as stream:
+                    return stream.read()
+        return False
+
+    def _model_url(self):
+        return f"{self.website}/ml_images.csv"
+
+
+def label_func(x):
+    dirname = x.parent.name
+    return dirname
+
+def image_path(image_id, path):
+    return path.joinpath(f"{image_id}.jpg")
+
+def arg_parser():
+    parser = argparse.ArgumentParser(description='Run predictions on images')
+    parser.add_argument('--image_dir', help='Optional local images directory to look in before using web',
+                        default='/data/images/mo/320') # Default is from images.mushroomobserver.org
+    parser.add_argument('--model_file', help='File containing model pkl')
+    parser.add_argument('--model_id', help='Id of the model in CSV')
+    parser.add_argument('--count', help='Randomly select count many images', type=int, default=-1)
+    parser.add_argument('--website', help='Website for Visual Model and Images', default='https://mushroomobserver.org')
+
+    return parser.parse_args()
+
+def main():
+    predictor = Predictor(arg_parser())
+    predictor.predict()
+
+main()
